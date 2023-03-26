@@ -1,19 +1,30 @@
 import { Box, Button, Container, FormControl, Input, Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
-import { useState } from "react";
 import { AiOutlineSearch, AiOutlineAppstoreAdd } from "react-icons/ai";
 import Line from "./Components/Line";
-// interface Tasks {
-//   taskname: string;
-//   description: string;
-// }
+import axios from 'axios';
+import { useEffect, useState } from "react";
+
+interface Data {
+  taskname: string;
+  description: string;
+}
 
 function App() {
-  // const [tasks, setTasks] = useState<Tasks[]>([]);
-  const [query, setQuery] = useState("");
+  const [data, setData] = useState<Data[]>([]);
 
-  const onChangeHandler = (e: any) => {
-    setQuery(e.target.value);
-  };
+  // fethcing data from backend :
+  useEffect(() => {
+    const FetchData = async () => {
+      const result = await axios.get<Data[]>('http://localhost:5000/api/tasks');
+      setData(result.data);
+    };
+    FetchData();
+    
+  }, []);
+  
+  
+
+ 
 
   // const SearchHandler = () => {
   //   Search(query);
@@ -25,7 +36,7 @@ function App() {
         <Box rounded="lg" boxShadow="base" p="4">
           <Box mt="2" gap={"2"} mb="4" display={"flex"}>
             <FormControl>
-              <Input type="text" onChange={onChangeHandler} />
+              <Input type="text"/>
             </FormControl>
           </Box>
         </Box>
