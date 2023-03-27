@@ -10,6 +10,7 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import { AiOutlineSearch, AiOutlineAppstoreAdd } from "react-icons/ai";
 import Line from "./Components/Line";
@@ -17,6 +18,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface Tasks {
+  _id: string;
   taskname: string;
   description: string;
 }
@@ -24,6 +26,7 @@ interface Tasks {
 function App() {
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [query, setQuery] = useState("");
+  const Toast = useToast();
 
   // Fethcing data from backend :
   useEffect(() => {
@@ -110,12 +113,13 @@ function App() {
                 <Tr>
                   <Th>Task Name</Th>
                   <Th>Description</Th>
+                  <Th>Task's Id</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {tasks?.map(({taskname, description }) => {
+                {tasks?.map(({_id, taskname, description }) => {
                   return (
-                    <Line taskname={taskname} description={description} />
+                    <Line id={_id} taskname={taskname} description={description} />
                   )
                 })}
               </Tbody>
