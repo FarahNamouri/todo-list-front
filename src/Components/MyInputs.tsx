@@ -7,6 +7,7 @@ type taskProps = {
     value?: any;
 };
 const MyInputs = ({name, onChangeHandler, value}: taskProps) => {
+
   return (
     <FormControl>
       <FormLabel>{name}</FormLabel>

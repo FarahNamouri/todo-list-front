@@ -35,6 +35,7 @@ interface Tasks {
 
 function App() {
   const [tasks, setTasks] = useState<Tasks[]>([]);
+  const [task, setTask] = useState({});
   const [query, setQuery] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [form, setForm] = useState({});
@@ -75,18 +76,17 @@ function App() {
     axios
     .post('/api/tasks', form)
     .then((res) => {
-      console.log(form);
-      setTasks([ ...tasks,res.data]);
+      setTasks([...tasks, res.data])
         Toast({
           title: "Task Added.",
-          description: "New Task is added.",
           status: "success",
           duration: 3000,
           isClosable: true,
     })
-    // setErrors({});
-    //     setForm({});
-    //     onClose();
+        setForm({});
+
+        // close the drawer :
+        onClose();
   })
     .catch(err => {
       // setErrors(err.response.data.error)
@@ -103,6 +103,17 @@ function App() {
 
     const onAdd = () => {
       AddTask(form)
+    }
+
+    const FindOne = async (id: any) => {
+      await axios
+      .get(`/api/tasks/${id}`)
+      .then((res) => {
+        setTasks(res.data)
+      })
+      .catch(() => {
+        console.log('error')
+      })
     }
 
   return (

@@ -1,4 +1,4 @@
-import { Box, Button, Td, Tr } from "@chakra-ui/react";
+import { Box, Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
 // import { useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { useToast } from "@chakra-ui/react";
@@ -12,6 +12,8 @@ type taskProps = {
 };
 
 const Line = ({ id, taskname, description }: taskProps) => {
+    const { onOpen, FindOne } = useDisclosure();
+
   const Toast = useToast();
   const [tasks, setTasks] = useState([]);
 
@@ -39,7 +41,10 @@ const Line = ({ id, taskname, description }: taskProps) => {
       <Td>{id} </Td>
       <Td>
         <Box display="flex" gap="1">
-          <Button colorScheme="blue">
+          <Button colorScheme="blue" onClick={() => {
+                onOpen();
+                FindOne(id);
+            }}>
             <AiOutlineEdit />
           </Button>
           <Button colorScheme="red" onClick={() => Delete(id)}>
