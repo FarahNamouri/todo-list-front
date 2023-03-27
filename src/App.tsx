@@ -10,7 +10,6 @@ import {
   Th,
   Thead,
   Tr,
-  useToast,
 } from "@chakra-ui/react";
 import { AiOutlineSearch, AiOutlineAppstoreAdd } from "react-icons/ai";
 import Line from "./Components/Line";
@@ -26,7 +25,6 @@ interface Tasks {
 function App() {
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [query, setQuery] = useState("");
-  const Toast = useToast();
 
   // Fethcing data from backend :
   useEffect(() => {
