@@ -23,9 +23,9 @@ interface Tasks {
 
 function App() {
   const [tasks, setTasks] = useState<Tasks[]>([]);
+  const [query, setQuery] = useState("");
 
-  // fethcing data from backend :
-
+  // Fethcing data from backend :
   useEffect(() => {
     const FetchData = async () => {
       const result = await axios.get<Tasks[]>("/api/tasks");
@@ -34,9 +34,25 @@ function App() {
     FetchData();
   }, []);
 
-  // const SearchHandler = () => {
-  //   Search(query);
-  // };
+  // Searching for tasks by key :
+  const Search = (query: String) => {
+    axios.post(`/api/tasks/search?key=${query}`)
+    .then((res) => {
+      setTasks(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+    })
+  };
+
+  const SearchHandler = () => {
+    Search(query);
+  }
+
+  // As we fill our input it will fill our empty state :
+  const onChangeHandler = (e: any) => {
+    setQuery(e.target.value);
+  }
 
   return (
     <>
@@ -44,7 +60,7 @@ function App() {
         <Box rounded="lg" boxShadow="base" p="4">
           <Box mt="2" gap={"2"} mb="4" display={"flex"}>
             <FormControl>
-              <Input type="text" />
+              <Input type="text" onChange={onChangeHandler}/>
             </FormControl>
           </Box>
         </Box>
@@ -69,6 +85,7 @@ function App() {
             minW="150px"
             mt="2"
             m="4"
+            onClick={() => SearchHandler()}
           >
             {" "}
             Search
