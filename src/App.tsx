@@ -10,9 +10,20 @@ import {
   Th,
   Thead,
   Tr,
+  DrawerBody, 
+  DrawerCloseButton, 
+  DrawerContent, 
+  DrawerFooter, 
+  DrawerHeader, 
+  DrawerOverlay, 
+  useDisclosure, 
+  Drawer,
+  Stack,
+  useToast
 } from "@chakra-ui/react";
 import { AiOutlineSearch, AiOutlineAppstoreAdd } from "react-icons/ai";
 import Line from "./Components/Line";
+import MyInputs from "./Components/MyInputs";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -25,6 +36,10 @@ interface Tasks {
 function App() {
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [query, setQuery] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [form, setForm] = useState({});
+  
+  const Toast = useToast();
 
   // Fethcing data from backend :
   useEffect(() => {
@@ -55,6 +70,41 @@ function App() {
     setQuery(e.target.value);
   }
 
+  // Adding a new Task :
+  const AddTask = (form: {}) => {
+    axios
+    .post('/api/tasks', form)
+    .then((res) => {
+      console.log(form);
+      setTasks([ ...tasks,res.data]);
+        Toast({
+          title: "Task Added.",
+          description: "New Task is added.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+    })
+    // setErrors({});
+    //     setForm({});
+    //     onClose();
+  })
+    .catch(err => {
+      // setErrors(err.response.data.error)
+      console.log('error');
+    })
+  }
+
+  const onChangeHr = (e:any) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    })
+  } 
+
+    const onAdd = () => {
+      AddTask(form)
+    }
+
   return (
     <>
       <Container maxW={"full"} p="5" fontSize={"25px"}>
@@ -75,6 +125,7 @@ function App() {
             minW="150px"
             mt="2"
             m="4"
+            onClick={onOpen}
           >
             Add New Task
           </Button>
@@ -102,7 +153,7 @@ function App() {
           marginLeft="20rem"
         >
           <Box p="4" justifyContent="space-between" mb="2">
-            Tasks To Do
+            List of My Tasks
           </Box>
 
           <TableContainer>
@@ -124,6 +175,31 @@ function App() {
             </Table>
           </TableContainer>
         </Box>
+      <Drawer 
+        isOpen={isOpen}
+        placement='right'
+        onClose={onClose}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Update OR Create Your Task </DrawerHeader>
+
+          <DrawerBody>
+            <Stack spacing={"24px"}>
+            <MyInputs name="taskname" onChangeHandler={onChangeHr}  />
+            <MyInputs name="description" onChangeHandler={onChangeHr}  />
+            </Stack>
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant='outline' mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme='blue' onClick={() => onAdd()}>Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
       </Container>
     </>
   );
