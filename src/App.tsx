@@ -1,30 +1,38 @@
-import { Box, Button, Container, FormControl, Input, Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  Input,
+  Table,
+  TableContainer,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { AiOutlineSearch, AiOutlineAppstoreAdd } from "react-icons/ai";
 import Line from "./Components/Line";
-import axios from 'axios';
+import axios from "axios";
 import { useEffect, useState } from "react";
 
-interface Data {
+interface Tasks {
   taskname: string;
   description: string;
 }
 
 function App() {
-  const [data, setData] = useState<Data[]>([]);
+  const [tasks, setTasks] = useState<Tasks[]>([]);
 
   // fethcing data from backend :
+
   useEffect(() => {
     const FetchData = async () => {
-      const result = await axios.get<Data[]>('http://localhost:5000/api/tasks');
-      setData(result.data);
+      const result = await axios.get<Tasks[]>("/api/tasks");
+      setTasks(result.data);
     };
     FetchData();
-    
   }, []);
-  
-  
-
- 
 
   // const SearchHandler = () => {
   //   Search(query);
@@ -36,36 +44,35 @@ function App() {
         <Box rounded="lg" boxShadow="base" p="4">
           <Box mt="2" gap={"2"} mb="4" display={"flex"}>
             <FormControl>
-              <Input type="text"/>
+              <Input type="text" />
             </FormControl>
           </Box>
         </Box>
 
-        <Box >
-        <Button
-              leftIcon={<AiOutlineAppstoreAdd />}
-              colorScheme="green"
-              variant="outline"
-              maxW="300px"
-              minW="150px"
-              mt="2"
-              m="4"
-            >
-              Add New Task
-            </Button>
-            <Button
-              leftIcon={<AiOutlineSearch />}
-              colorScheme="green"
-              variant="outline"
-              maxW="300px"
-              minW="150px"
-              mt="2"
-              m="4"
-
-            >
-              {" "}
-              Search
-            </Button>
+        <Box>
+          <Button
+            leftIcon={<AiOutlineAppstoreAdd />}
+            colorScheme="green"
+            variant="outline"
+            maxW="300px"
+            minW="150px"
+            mt="2"
+            m="4"
+          >
+            Add New Task
+          </Button>
+          <Button
+            leftIcon={<AiOutlineSearch />}
+            colorScheme="green"
+            variant="outline"
+            maxW="300px"
+            minW="150px"
+            mt="2"
+            m="4"
+          >
+            {" "}
+            Search
+          </Button>
         </Box>
 
         <Box
@@ -89,16 +96,15 @@ function App() {
                 </Tr>
               </Thead>
               <Tbody>
-                <Line />
-                <Line />
+                {tasks?.map(({taskname, description }) => {
+                  return (
+                    <Line taskname={taskname} description={description} />
+                  )
+                })}
               </Tbody>
             </Table>
           </TableContainer>
         </Box>
-
-
-        
-
       </Container>
     </>
   );
