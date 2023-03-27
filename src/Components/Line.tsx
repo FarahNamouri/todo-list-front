@@ -12,7 +12,7 @@ type taskProps = {
 };
 
 const Line = ({ id, taskname, description }: taskProps) => {
-    const { onOpen, FindOne } = useDisclosure();
+    const { onOpen } = useDisclosure();
 
   const Toast = useToast();
   const [tasks, setTasks] = useState([]);
@@ -43,7 +43,7 @@ const Line = ({ id, taskname, description }: taskProps) => {
         <Box display="flex" gap="1">
           <Button colorScheme="blue" onClick={() => {
                 onOpen();
-                FindOne(id);
+                // FindOne(id);
             }}>
             <AiOutlineEdit />
           </Button>
