@@ -6,7 +6,8 @@ type taskProps = {
     onChangeHandler: (e: any) => any;
     value?: any;
 };
-const MyInputs = ({name, onChangeHandler, value}: taskProps) => {
+const MyInputs = ({name, onChangeHandler,  value}: taskProps) => {
+
 
   return (
     <FormControl>

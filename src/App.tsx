@@ -26,6 +26,7 @@ import Line from "./Components/Line";
 import MyInputs from "./Components/MyInputs";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Nav from "./Components/Nav";
 
 interface Tasks {
   _id: string;
@@ -35,6 +36,8 @@ interface Tasks {
 
 function App() {
   const [tasks, setTasks] = useState<Tasks[]>([]);
+  // To handle our errors :
+  const [errors, setErrors] = useState({});
   const [task, setTask] = useState({});
   const [query, setQuery] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -89,8 +92,7 @@ function App() {
         onClose();
   })
     .catch(err => {
-      // setErrors(err.response.data.error)
-      console.log('error');
+      setErrors(err.response.data.error);
     })
   }
 
@@ -109,7 +111,7 @@ function App() {
       await axios
       .get(`/api/tasks/${id}`)
       .then((res) => {
-        setTasks(res.data)
+        setTask(res.data)
       })
       .catch(() => {
         console.log('error')
@@ -119,7 +121,10 @@ function App() {
   return (
     <>
       <Container maxW={"full"} p="5" fontSize={"25px"}>
-        <Box rounded="lg" boxShadow="base" p="4">
+        <Box p={"4"} m="5" boxShadow="outline">
+          <Nav />
+        </Box>
+        <Box rounded="lg" boxShadow="lg" p="4">
           <Box mt="2" gap={"2"} mb="4" display={"flex"}>
             <FormControl>
               <Input type="text" onChange={onChangeHandler}/>
@@ -127,7 +132,7 @@ function App() {
           </Box>
         </Box>
 
-        <Box>
+        <Box shadow={"base"}>
           <Button
             leftIcon={<AiOutlineAppstoreAdd />}
             colorScheme="green"
@@ -198,7 +203,7 @@ function App() {
 
           <DrawerBody>
             <Stack spacing={"24px"}>
-            <MyInputs name="taskname" onChangeHandler={onChangeHr}  />
+            <MyInputs name="taskname" onChangeHandler={onChangeHr} />
             <MyInputs name="description" onChangeHandler={onChangeHr}  />
             </Stack>
           </DrawerBody>

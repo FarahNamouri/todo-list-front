@@ -16,7 +16,8 @@ const Line = ({ id, taskname, description }: taskProps) => {
 
   const Toast = useToast();
   const [tasks, setTasks] = useState([]);
-
+  const [task, setTask] = useState({});
+ 
   // Filter our tasks and delete them :
   const Delete = (id: string) => {
     axios
@@ -34,6 +35,12 @@ const Line = ({ id, taskname, description }: taskProps) => {
         console.log(err.response.data);
       });
   };
+
+  const onUpdate = () => {
+    console.log(task);
+  }
+
+
   return (
     <Tr>
       <Td>{taskname}</Td>
@@ -43,7 +50,7 @@ const Line = ({ id, taskname, description }: taskProps) => {
         <Box display="flex" gap="1">
           <Button colorScheme="blue" onClick={() => {
                 onOpen();
-                // FindOne(id);
+                onUpdate();
             }}>
             <AiOutlineEdit />
           </Button>
